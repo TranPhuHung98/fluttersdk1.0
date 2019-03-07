@@ -1,0 +1,6 @@
+Upgrading Flutter from E:\dev\flutter...
+Updating 5391447fae..8661d8aecd
+error: Your local changes to the following files would be overwritten by merge:
+	packages/flutter/lib/src/cupertino/switch.dart
+	packages/flutter/lib/src/material/dropdown.dart
+	packages/flutter/lib/src/material/icons.dart
