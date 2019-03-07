@@ -4,3 +4,17 @@ error: Your local changes to the following files would be overwritten by merge:
 	packages/flutter/lib/src/cupertino/switch.dart
 	packages/flutter/lib/src/material/dropdown.dart
 	packages/flutter/lib/src/material/icons.dart
+
+packages/flutter/lib/src/cupertino/switch.dart
+line 162: const Color _kTrackColor = Color.fromARGB(200, 153, 153, 153);
+packages/flutter/lib/src/material/dropdown.dart
+line 505: + this.colorIcon,
+line 524: + final Color colorIcon;
+line 671: return widget.colorIcon;
+     677: return widget.colorIcon;
+     730: Icon(Icons.arrow_drop_up,
+packages/flutter/lib/src/material/icons.dart
+line 2990,2991,2992:
+  static const IconData profile_elo = const IconData(0xe901, fontFamily: 'icomoon');
+  static const IconData trophy_elo = const IconData(0xe902, fontFamily: 'icomoon');
+  static const IconData menu_elo = const IconData(0xe900, fontFamily: 'icomoon');
