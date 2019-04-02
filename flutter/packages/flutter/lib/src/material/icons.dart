@@ -25,7 +25,7 @@ import 'package:flutter/widgets.dart';
 ///
 ///  * [Icon]
 ///  * [IconButton]
-///  * [design.google.com/icons](https://design.google.com/icons/)
+///  * <https://design.google.com/icons/>
 class Icons {
   Icons._();
 
@@ -2987,8 +2987,5 @@ class Icons {
 
   /// <i class="material-icons md-36">zoom_out_map</i> &#x2014; material icon named "zoom out map".
   static const IconData zoom_out_map = IconData(0xe56b, fontFamily: 'MaterialIcons');
-  static const IconData profile_elo = const IconData(0xe901, fontFamily: 'icomoon');
-  static const IconData trophy_elo = const IconData(0xe902, fontFamily: 'icomoon');
-  static const IconData menu_elo = const IconData(0xe900, fontFamily: 'icomoon');
   // END GENERATED
 }

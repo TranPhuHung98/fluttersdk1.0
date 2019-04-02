@@ -3,12 +3,12 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math' show Random, max;
 
 import 'package:crypto/crypto.dart';
 import 'package:intl/intl.dart';
 
+import '../convert.dart';
 import '../globals.dart';
 import 'context.dart';
 import 'file_system.dart';
@@ -203,6 +203,7 @@ class SettingsFile {
   final Map<String, String> values = <String, String>{};
 
   void writeContents(File file) {
+    file.parent.createSync(recursive: true);
     file.writeAsStringSync(values.keys.map<String>((String key) {
       return '$key=${values[key]}';
     }).join('\n'));

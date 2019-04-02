@@ -4,7 +4,6 @@
 
 import 'dart:async';
 import 'dart:collection' show HashMap;
-import 'dart:ui' as ui show window;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -47,9 +46,8 @@ typedef LocaleListResolutionCallback = Locale Function(List<Locale> locales, Ite
 /// The signature of [WidgetsApp.localeResolutionCallback].
 ///
 /// It is recommended to provide a [LocaleListResolutionCallback] instead of a
-/// [LocaleResolutionCallback] when possible, as [LocaleListResolutionCallback] as
-/// this callback only recieves a subset of the information provided
-/// in [LocaleListResolutionCallback].
+/// [LocaleResolutionCallback] when possible, as [LocaleResolutionCallback] only
+/// recieves a subset of the information provided in [LocaleListResolutionCallback].
 ///
 /// A [LocaleResolutionCallback] is responsible for computing the locale of the app's
 /// [Localizations] object when the app starts and when user changes the default
@@ -84,9 +82,7 @@ typedef GenerateAppTitle = String Function(BuildContext context);
 /// The signature of [WidgetsApp.pageRouteBuilder].
 ///
 /// Creates a [PageRoute] using the given [RouteSettings] and [WidgetBuilder].
-// TODO(dnfield): when https://github.com/dart-lang/sdk/issues/34572 is resolved
-// this can use type arguments again
-typedef PageRouteFactory = PageRoute<dynamic> Function(RouteSettings settings, WidgetBuilder builder);
+typedef PageRouteFactory = PageRoute<T> Function<T>(RouteSettings settings, WidgetBuilder builder);
 
 /// A convenience class that wraps a number of widgets that are commonly
 /// required for an application.
@@ -713,7 +709,7 @@ class _WidgetsAppState extends State<WidgetsApp> implements WidgetsBindingObserv
   void initState() {
     super.initState();
     _updateNavigator();
-    _locale = _resolveLocales(ui.window.locales, widget.supportedLocales);
+    _locale = _resolveLocales(WidgetsBinding.instance.window.locales, widget.supportedLocales);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -755,7 +751,7 @@ class _WidgetsAppState extends State<WidgetsApp> implements WidgetsBindingObserv
       assert(widget.pageRouteBuilder != null,
         'The default onGenerateRoute handler for WidgetsApp must have a '
         'pageRouteBuilder set if the home or routes properties are set.');
-      final Route<dynamic> route = widget.pageRouteBuilder(
+      final Route<dynamic> route = widget.pageRouteBuilder<dynamic>(
         settings,
         pageContentBuilder,
       );
@@ -932,7 +928,7 @@ class _WidgetsAppState extends State<WidgetsApp> implements WidgetsBindingObserv
       }
       // Look for language+country match.
       if (userLocale.countryCode != null) {
-      final Locale match = languageAndCountryLocales['${userLocale.languageCode}_${userLocale.countryCode}'];
+        final Locale match = languageAndCountryLocales['${userLocale.languageCode}_${userLocale.countryCode}'];
         if (match != null) {
           return match;
         }
@@ -999,7 +995,7 @@ class _WidgetsAppState extends State<WidgetsApp> implements WidgetsBindingObserv
   @override
   void didChangeAccessibilityFeatures() {
     setState(() {
-      // The properties of ui.window have changed. We use them in our build
+      // The properties of window have changed. We use them in our build
       // function, so we need setState(), but we don't cache anything locally.
     });
   }
@@ -1010,7 +1006,7 @@ class _WidgetsAppState extends State<WidgetsApp> implements WidgetsBindingObserv
   @override
   void didChangeMetrics() {
     setState(() {
-      // The properties of ui.window have changed. We use them in our build
+      // The properties of window have changed. We use them in our build
       // function, so we need setState(), but we don't cache anything locally.
     });
   }
@@ -1018,12 +1014,21 @@ class _WidgetsAppState extends State<WidgetsApp> implements WidgetsBindingObserv
   @override
   void didChangeTextScaleFactor() {
     setState(() {
-      // The textScaleFactor property of ui.window has changed. We reference
-      // ui.window in our build function, so we need to call setState(), but
+      // The textScaleFactor property of window has changed. We reference
+      // window in our build function, so we need to call setState(), but
       // we don't need to cache anything locally.
     });
   }
 
+  // RENDERING
+  @override
+  void didChangePlatformBrightness() {
+    setState(() {
+      // The platformBrightness property of window has changed. We reference
+      // window in our build function, so we need to call setState(), but
+      // we don't need to cache anything locally.
+    });
+  }
 
   // BUILDER
 
@@ -1080,12 +1085,12 @@ class _WidgetsAppState extends State<WidgetsApp> implements WidgetsBindingObserv
     if (_navigator != null) {
       navigator = Navigator(
         key: _navigator,
-        // If ui.window.defaultRouteName isn't '/', we should assume it was set
+        // If window.defaultRouteName isn't '/', we should assume it was set
         // intentionally via `setInitialRoute`, and should override whatever
         // is in [widget.initialRoute].
-        initialRoute: ui.window.defaultRouteName != Navigator.defaultRouteName
-            ? ui.window.defaultRouteName
-            : widget.initialRoute ?? ui.window.defaultRouteName,
+        initialRoute: WidgetsBinding.instance.window.defaultRouteName != Navigator.defaultRouteName
+            ? WidgetsBinding.instance.window.defaultRouteName
+            : widget.initialRoute ?? WidgetsBinding.instance.window.defaultRouteName,
         onGenerateRoute: _onGenerateRoute,
         onUnknownRoute: _onUnknownRoute,
         observers: widget.navigatorObservers,
@@ -1186,7 +1191,7 @@ class _WidgetsAppState extends State<WidgetsApp> implements WidgetsBindingObserv
     assert(_debugCheckLocalizations(appLocale));
 
     return MediaQuery(
-      data: MediaQueryData.fromWindow(ui.window),
+      data: MediaQueryData.fromWindow(WidgetsBinding.instance.window),
       child: Localizations(
         locale: appLocale,
         delegates: _localizationsDelegates.toList(),

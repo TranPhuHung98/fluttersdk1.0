@@ -18,6 +18,7 @@ dart_library("flutter_tools") {
     "//third_party/dart/third_party/pkg/linter",
     "//third_party/dart-pkg/pub/archive",
     "//third_party/dart-pkg/pub/args",
+    "//third_party/dart-pkg/pub/build_runner_core",
     "//third_party/dart-pkg/pub/collection",
     "//third_party/dart-pkg/pub/completion",
     "//third_party/dart-pkg/pub/coverage",
@@ -237,18 +238,14 @@ dart_tool("fuchsia_tester") {
   ]
 }
 
-dart_tool("fuchsia_tools") {
-  package_name = "fuchsia_tools"
-  main_dart = "bin/fuchsia_tools.dart"
+dart_tool("fuchsia_attach") {
+  package_name = "fuchsia_attach"
+  main_dart = "bin/fuchsia_attach.dart"
 
   # Can be left empty as analysis is disabled.
   sources = []
 
   disable_analysis = true
-
-  non_dart_deps = [
-    "//third_party/flutter/frontend_server:frontend_server_tool",
-  ]
 
   deps = [
     ":flutter_tools",
